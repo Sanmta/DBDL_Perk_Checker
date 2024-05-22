@@ -12,14 +12,18 @@ class MainWindow(QWidget):
         # set the window size
         self.setGeometry(100, 100, 1300, 800)
 
-        # create a label
-        label = create_label(self, 'Hello World!')
-        label.setFont(QFont('Roboto', 200))
-
         # create a layout
         layout = QVBoxLayout()
-        layout.addWidget(label)
         self.setLayout(layout)
+
+        # create labels
+        labels = ["Survivor 1", "Survivor 2", "Survivor 3", "Survivor 4"]
+        for label in labels:
+            label = create_label(self, label)
+            label.setFont(QFont('Roboto', 15))
+            layout.addWidget(label)
+            layout.addStretch()
+        
 
         # show the window
         self.show()
