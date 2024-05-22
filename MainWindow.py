@@ -13,29 +13,24 @@ class MainWindow(QWidget):
         # set the window size
         self.setGeometry(100, 100, 1300, 800)
 
-        # create a layout
-        layout = QVBoxLayout()
-        self.setLayout(layout)
+        # create a vertical layout for the main window
+        main_layout = QVBoxLayout(self)
 
         # create labels
         labels = ["Survivor 1", "Survivor 2", "Survivor 3", "Survivor 4"]
-        for label in labels:
-            label = create_label(self, label)
+
+        for j in range(4):
+           
+            layout = QHBoxLayout()
+            label = create_label(self, labels[j], Qt.AlignmentFlag.AlignCenter)
             label.setFont(QFont('Roboto', 15))
             layout.addWidget(label)
             layout.addStretch()
-        
-        # create QLineEdit for perks
-        grid = QGridLayout()    
-        layout.addLayout(grid)
-
-        # for j in range(4):
-        for i in range(4):
-            perks = QLineEdit(self)
-            perks.setCompleter(list_of_all_perks())
-            grid.addWidget(perks, 0, i)
-
-        
+            for i in range(4):
+                perks = QLineEdit(self)
+                perks.setCompleter(list_of_all_perks())
+                layout.addWidget(perks)
+            main_layout.addLayout(layout)
 
         # show the window
         self.show()
