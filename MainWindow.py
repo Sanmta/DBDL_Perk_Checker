@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout
+from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QCompleter, QLineEdit
 from PyQt6.QtGui import QFont
 
 class MainWindow(QWidget):
@@ -24,12 +24,27 @@ class MainWindow(QWidget):
             layout.addWidget(label)
             layout.addStretch()
         
+        # create QLineEdit for perks
+        perks = QLineEdit(self)
+        perks.setCompleter(list_of_all_perks())
 
         # show the window
         self.show()
 
 def create_label(self, text):
     return QLabel(text, self)
+
+def create_perk_QLineEdit(self):
+    return QLineEdit(self)
+
+def list_of_all_perks():
+    return QCompleter([
+        'Adrenaline',
+        'Ace in the Hole',
+        'Aftercare',
+        'Alert',
+        'Autodidact',
+    ])
 
 if __name__ == '__main__':
     app = QApplication([])
