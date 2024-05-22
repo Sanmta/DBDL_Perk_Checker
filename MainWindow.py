@@ -1,6 +1,7 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QCompleter, QLineEdit
+from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QCompleter, QLineEdit, QHBoxLayout, QGridLayout
 from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt
 
 class MainWindow(QWidget):
     def __init__(self, *args, **kwargs):
@@ -25,8 +26,16 @@ class MainWindow(QWidget):
             layout.addStretch()
         
         # create QLineEdit for perks
-        perks = QLineEdit(self)
-        perks.setCompleter(list_of_all_perks())
+        grid = QGridLayout()    
+        layout.addLayout(grid)
+
+        # for j in range(4):
+        for i in range(4):
+            perks = QLineEdit(self)
+            perks.setCompleter(list_of_all_perks())
+            grid.addWidget(perks, 0, i)
+
+        
 
         # show the window
         self.show()
