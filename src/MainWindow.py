@@ -36,9 +36,9 @@ class Ui_MainWindow(object):
                 # line_edit = self.centralwidget.findChild(QtWidgets.QLineEdit, "linePerk" + str(j) + "Surv" + str(i))
 
         # create buttons
-        btnPaste = create_button(self, 380, 840, 261, 31, "Paste and Search")
-        btnReset = create_button(self, 660, 840, 171, 31, "Reset")
-       
+        btnPaste = create_button(self, 380, 840, 261, 31, "Paste and Search", reset_perks(self))
+        btnReset = create_button(self, 660, 840, 171, 31, "Reset", reset_perks(self))
+        btnReset.clicked.connect(lambda: reset_perks(self))
         # set central widget
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -92,9 +92,9 @@ def on_selection_changed(self, perkSearchBar):
     perk_no = object_name.split('_')[1]
     survivor_no = object_name.split('_')[3]
     perkIcon = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerk_" + perk_no + "_Surv_" + survivor_no)
-    try_icon_update(self, perkSearchBar, perkIcon)
+    try_icon_update(perkSearchBar, perkIcon)
     
-def try_icon_update(self, perkSearchBar, perkIcon):
+def try_icon_update(perkSearchBar, perkIcon):
     perk = link_perk_to_image(perkSearchBar.text())
     if perk_exists(perk) == True:
         perkIcon.setPixmap(QtGui.QPixmap("assets/perks/iconPerks_" + perk + ".png"))
@@ -103,6 +103,7 @@ def try_icon_update(self, perkSearchBar, perkIcon):
         return True
     else:
         perkIcon.setProperty("Valid", False)
+        perkIcon.hide()
         return False
 
 def perk_exists(perk_name):
@@ -121,7 +122,7 @@ def create_perk_search_bar(self, perk_no, survivor_no, x, y):
     perkSearchBar.textChanged.connect(lambda: on_selection_changed(self, perkSearchBar))
     return perkSearchBar
 
-def create_button(self, x, y, width, height, text):
+def create_button(self, x, y, width, height, text, function):
     button = QtWidgets.QPushButton(parent=self.centralwidget)
     button.setGeometry(QtCore.QRect(x, y, width, height))
     font = QtGui.QFont()
@@ -131,6 +132,12 @@ def create_button(self, x, y, width, height, text):
     button.setObjectName("btn_" + text)
     button.setText(text)
     return button
+
+def reset_perks(self):
+    for i in range(1, 5): # 4 survivors
+        for j in range(1, 5): # 4 perks per survivor
+            line_edit = self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_" + str(j) + "_Surv_" + str(i))
+            line_edit.clear()
 
 def link_perk_to_image(input_string):
     # Remove colons and single quotes
