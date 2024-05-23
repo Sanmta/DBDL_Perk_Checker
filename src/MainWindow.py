@@ -8,6 +8,7 @@
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QCompleter
+import os
 
 
 class Ui_MainWindow(object):
@@ -82,9 +83,9 @@ def create_perk_icon(self, perk_no, survivor_no, x, y):
     perkIcon = QtWidgets.QLabel(parent=self.centralwidget)
     perkIcon.setGeometry(QtCore.QRect(x, y, 150, 150))
     perkIcon.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
+    perkIcon.setProperty("Valid", False)
     perkIcon.setScaledContents(True)
     perkIcon.setObjectName("lblPerk_" + perk_no + "_Surv_" + survivor_no)     
-    print(perkIcon.objectName(), "at x:", x, "y:", y)              
 
 def on_selection_changed(self, perkSearchBar):
     object_name = perkSearchBar.objectName()
@@ -94,12 +95,21 @@ def on_selection_changed(self, perkSearchBar):
     try_icon_update(self, perkSearchBar, perkIcon)
     
 def try_icon_update(self, perkSearchBar, perkIcon):
-    try:
-        perk = link_perk_to_image(perkSearchBar.text())
+    perk = link_perk_to_image(perkSearchBar.text())
+    if perk_exists(perk) == True:
         perkIcon.setPixmap(QtGui.QPixmap("assets/perks/iconPerks_" + perk + ".png"))
+        perkIcon.setProperty("Valid", True)
         perkIcon.show()
         return True
-    except: return None
+    else:
+        perkIcon.setProperty("Valid", False)
+        return False
+
+def perk_exists(perk_name):
+    if os.path.exists("assets/perks/iconPerks_" + perk_name + ".png"):
+        return True
+    else:
+        return False
 
 def create_perk_search_bar(self, perk_no, survivor_no, x, y):
     perkSearchBar = QtWidgets.QLineEdit(parent=self.centralwidget)
@@ -109,7 +119,6 @@ def create_perk_search_bar(self, perk_no, survivor_no, x, y):
     completer.setCaseSensitivity(QtCore.Qt.CaseSensitivity.CaseInsensitive)
     perkSearchBar.setCompleter(completer)
     perkSearchBar.textChanged.connect(lambda: on_selection_changed(self, perkSearchBar))
-    print(perkSearchBar.objectName(), "at x:", x, "y:", y)
     return perkSearchBar
 
 def create_button(self, x, y, width, height, text):
@@ -125,9 +134,8 @@ def create_button(self, x, y, width, height, text):
 
 def link_perk_to_image(input_string):
     # Remove colons and single quotes
-    formatted_string = input_string.replace(":", "").replace("'", "").replace(" ", "")
+    formatted_string = input_string.replace(":", "").replace("'", "").replace(" ", "").replace("-", "")
     formatted_string = " ".join(word.capitalize() for word in formatted_string.split())
-    print(formatted_string)
     return formatted_string
 
 def list_of_all_perks():
