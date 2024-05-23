@@ -10,9 +10,9 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QCompleter
 import os
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+        # main window setup
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1300, 900)
 
@@ -36,42 +36,59 @@ class Ui_MainWindow(object):
                 # line_edit = self.centralwidget.findChild(QtWidgets.QLineEdit, "linePerk" + str(j) + "Surv" + str(i))
 
         # create buttons
-        btnPaste = create_button(self, 380, 840, 261, 31, "Paste and Search", reset_perks(self))
+        btnPaste = create_button(self, 380, 840, 261, 31, "Paste and Search", reset_perks(self)) # TODO: add paste function
         btnReset = create_button(self, 660, 840, 171, 31, "Reset", reset_perks(self))
+        btnPaste.clicked.connect(lambda: reset_perks(self)) # TODO: add paste function
         btnReset.clicked.connect(lambda: reset_perks(self))
+        
         # set central widget
         MainWindow.setCentralWidget(self.centralwidget)
-
-        #QtCore.QMetaObject.connectSlotsByName(MainWindow) unsure if this is needed
 
         # set window title and show
         MainWindow.setWindowTitle("DBDL Perk Checker")
         MainWindow.setWindowIcon(QtGui.QIcon("assets/DBDL.png"))
         MainWindow.show()
 
+# function to create a label for each survivor
 def create_survivor_label(self, survivor_no, x, y):
     _translate = QtCore.QCoreApplication.translate
     labelSurvivor = QtWidgets.QLabel(parent=self.centralwidget)
+
+    # set position
     labelSurvivor.setGeometry(QtCore.QRect(x, y, 101, 21))
+
+    # set font & size
     font = QtGui.QFont()
     font.setFamily("Roboto")
     font.setPointSize(16)
     labelSurvivor.setFont(font)
+
+    # set object information
     labelSurvivor.setObjectName("lblSurvivor_" + survivor_no)
     labelSurvivor.setText(_translate("MainWindow", "Survivor "  + survivor_no + ":"))
 
+# function to create a "valid" label for each build
 def create_valid_label(self, survivor_no, x, y):
     _translate = QtCore.QCoreApplication.translate
     labelValid = QtWidgets.QLabel(parent=self.centralwidget)
+
+    # set position
     labelValid.setGeometry(QtCore.QRect(x, y, 101, 21))
+
+    # set font & size
     font = QtGui.QFont()
     font.setFamily("Roboto")
     font.setPointSize(16)
     labelValid.setFont(font)
+
+    # set object information
     labelValid.setObjectName("lblSurv_" + survivor_no + "_Valid")
     labelValid.setText(_translate("MainWindow", "Valid!"))
+
+    # set label to hidden by default
     labelValid.hide()
 
+# function to create a perk icon for each perk
 def create_perk_icon(self, perk_no, survivor_no, x, y):
     # create perk icon background
     perkIconBG = QtWidgets.QLabel(parent=self.centralwidget)
@@ -87,64 +104,92 @@ def create_perk_icon(self, perk_no, survivor_no, x, y):
     perkIcon.setScaledContents(True)
     perkIcon.setObjectName("lblPerk_" + perk_no + "_Surv_" + survivor_no)     
 
+# function to try and update the perk icon when the search bar is changed
 def on_selection_changed(self, perkSearchBar):
+    # get the object name of the search bar
     object_name = perkSearchBar.objectName()
+
+    # get the perk number and survivor number from the object name
     perk_no = object_name.split('_')[1]
     survivor_no = object_name.split('_')[3]
+
+    # get the perkIcon object
     perkIcon = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerk_" + perk_no + "_Surv_" + survivor_no)
+    
+    # call function
     try_icon_update(perkSearchBar, perkIcon)
     
+# function to update perk icon
 def try_icon_update(perkSearchBar, perkIcon):
-    perk = link_perk_to_image(perkSearchBar.text())
+    # check if perk exists
+    perk = format_perk_name(perkSearchBar.text())
     if perk_exists(perk) == True:
-        perkIcon.setPixmap(QtGui.QPixmap("assets/perks/iconPerks_" + perk + ".png"))
-        perkIcon.setProperty("Valid", True)
-        perkIcon.show()
+        perkIcon.setPixmap(QtGui.QPixmap("assets/perks/iconPerks_" + perk + ".png")) # update icon if exists
+        perkIcon.setProperty("Valid", True) # set property to true (this will be used to check if the build is valid)
+        perkIcon.show() # show icon
         return True
     else:
-        perkIcon.setProperty("Valid", False)
-        perkIcon.hide()
+        perkIcon.setProperty("Valid", False) # set property to false
+        perkIcon.hide() # hide icon
         return False
 
+# function to check if perk exists in the assets folder
 def perk_exists(perk_name):
     if os.path.exists("assets/perks/iconPerks_" + perk_name + ".png"):
         return True
     else:
         return False
 
+# function to create a search bar for each perk
 def create_perk_search_bar(self, perk_no, survivor_no, x, y):
     perkSearchBar = QtWidgets.QLineEdit(parent=self.centralwidget)
+
+    # set position
     perkSearchBar.setGeometry(QtCore.QRect(x, y, 151, 22))
     perkSearchBar.setObjectName("searchPerk_" + perk_no + "_Surv_" + survivor_no) 
+
+    # create completer
     completer = list_of_all_perks()
     completer.setCaseSensitivity(QtCore.Qt.CaseSensitivity.CaseInsensitive)
     perkSearchBar.setCompleter(completer)
+
+    # connect function to search bar when text changes
     perkSearchBar.textChanged.connect(lambda: on_selection_changed(self, perkSearchBar))
     return perkSearchBar
 
-def create_button(self, x, y, width, height, text, function):
+# function to create a button
+def create_button(self, x, y, width, height, text):
     button = QtWidgets.QPushButton(parent=self.centralwidget)
+
+    # set position
     button.setGeometry(QtCore.QRect(x, y, width, height))
+
+    # set font & size
     font = QtGui.QFont()
     font.setFamily("Roboto")
     font.setPointSize(16)
     button.setFont(font)
+
+    # set object information
     button.setObjectName("btn_" + text)
     button.setText(text)
     return button
 
+# function to reset all perk search bars, this will in turn reset all the perk icons
 def reset_perks(self):
     for i in range(1, 5): # 4 survivors
         for j in range(1, 5): # 4 perks per survivor
             line_edit = self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_" + str(j) + "_Surv_" + str(i))
             line_edit.clear()
 
-def link_perk_to_image(input_string):
-    # Remove colons and single quotes
+# function to format perk name into valid path to locate the perk icon
+def format_perk_name(input_string):
+    # Remove : ' - and spaces from the string
     formatted_string = input_string.replace(":", "").replace("'", "").replace(" ", "").replace("-", "")
     formatted_string = " ".join(word.capitalize() for word in formatted_string.split())
     return formatted_string
 
+# function to return a QCompleter object with a list of all survivor perks
 def list_of_all_perks():
     return QCompleter([
         'Ace in the Hole',
@@ -289,6 +334,7 @@ def list_of_all_perks():
         'Wiretap'
     ])
 
+# main function
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
