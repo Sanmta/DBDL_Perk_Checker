@@ -72,9 +72,16 @@ def create_valid_label(self, survivor_no, x, y):
     labelValid.hide()
 
 def create_perk_icon(self, perk_no, survivor_no, x, y):
+    # create perk icon background
+    perkIconBG = QtWidgets.QLabel(parent=self.centralwidget)
+    perkIconBG.setGeometry(QtCore.QRect(x, y, 150, 150))
+    perkIconBG.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
+    perkIconBG.setScaledContents(True)
+
+    # create perk icon over background
     perkIcon = QtWidgets.QLabel(parent=self.centralwidget)
     perkIcon.setGeometry(QtCore.QRect(x, y, 150, 150))
-    perkIcon.setPixmap(QtGui.QPixmap("assets/DBDL.png"))
+    perkIcon.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
     perkIcon.setScaledContents(True)
     perkIcon.setObjectName("lblPerk_" + perk_no + "_Surv_" + survivor_no)     
     print(perkIcon.objectName(), "at x:", x, "y:", y)              
@@ -84,8 +91,15 @@ def on_selection_changed(self, perkSearchBar):
     perk_no = object_name.split('_')[1]
     survivor_no = object_name.split('_')[3]
     perkIcon = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerk_" + perk_no + "_Surv_" + survivor_no)
-    # perkIcon.setPixmap(QtGui.QPixmap("assets/" + perk_name + ".png"))
-    perkIcon.hide()
+    try_icon_update(self, perkSearchBar, perkIcon)
+    
+def try_icon_update(self, perkSearchBar, perkIcon):
+    try:
+        perk = link_perk_to_image(perkSearchBar.text())
+        perkIcon.setPixmap(QtGui.QPixmap("assets/perks/iconPerks_" + perk + ".png"))
+        perkIcon.show()
+        return True
+    except: return None
 
 def create_perk_search_bar(self, perk_no, survivor_no, x, y):
     perkSearchBar = QtWidgets.QLineEdit(parent=self.centralwidget)
@@ -108,6 +122,13 @@ def create_button(self, x, y, width, height, text):
     button.setObjectName("btn_" + text)
     button.setText(text)
     return button
+
+def link_perk_to_image(input_string):
+    # Remove colons and single quotes
+    formatted_string = input_string.replace(":", "").replace("'", "").replace(" ", "")
+    formatted_string = " ".join(word.capitalize() for word in formatted_string.split())
+    print(formatted_string)
+    return formatted_string
 
 def list_of_all_perks():
     return QCompleter([
