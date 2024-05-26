@@ -47,19 +47,41 @@ def search():
 
     for i, (x, y, w, h) in enumerate(rois):
         roi = main_image_gray[y:y+h, x:x+w]
+
+           # Apply thresholding to make black colors blacker
+        _, thresholded_roi = cv2.threshold(roi, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+
         mse_result = 0
         ssim_result = 0
         for j, reference_image in enumerate(resized_reference_images):
+            threshold_needed = False
             m, s = compareImages(roi, reference_image)
-            print(f'ROI {i+1} vs Reference {reference_files[j]}: MSE={m}, SSIM={s}')
             if s > ssim_result:
                 mse_result = m
                 ssim_result = s
                 best_match = j
-        print(f'Best match for ROI {i+1}: Reference {reference_files[best_match]}')
-        cv2.imwrite('assets/result.png', roi, [cv2.IMWRITE_PNG_COMPRESSION, 0])
+
+        if "DejaVu" in reference_files[best_match] or "ObjectOfObsession" in reference_files[best_match] or "DarkSense" in reference_files[best_match] or "Kindred" in reference_files[best_match]:
+            threshold_needed = True
+            ssim_result_threshold = 0
+            mse_result_threshold = 0
+            for k, reference_image in enumerate(resized_reference_images):
+                n, r = compareImages(thresholded_roi, reference_image)
+                if r > ssim_result_threshold:
+                    mse_result_threshold = n
+                    ssim_result_threshold = r
+                    best_match_threshold = k
+        cv2.imwrite('assets/r.png', thresholded_roi, [cv2.IMWRITE_PNG_COMPRESSION, 0])
+            
+        file_name = 'assets/result'+ str(i) +'.png'
+        cv2.imwrite(file_name, roi, [cv2.IMWRITE_PNG_COMPRESSION, 0])
         cv2.imwrite('assets/HighQualResult.png', reference_images[best_match], [cv2.IMWRITE_PNG_COMPRESSION, 0])
         cv2.imwrite('assets/lowQualResult.png', resized_reference_images[best_match], [cv2.IMWRITE_PNG_COMPRESSION, 0])
+        if threshold_needed == True:
+           print(f'Best match for ROI {i+1}: Reference {reference_files[best_match_threshold]}')
+        else: 
+            print(f'Best match for ROI {i+1}: Reference {reference_files[best_match]}')
+        
         
 if __name__ == '__main__':
     search()
