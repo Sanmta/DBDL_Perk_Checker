@@ -36,8 +36,8 @@ class Ui_MainWindow(object):
                 # line_edit = self.centralwidget.findChild(QtWidgets.QLineEdit, "linePerk" + str(j) + "Surv" + str(i))
 
         # create buttons
-        btnPaste = create_button(self, 380, 840, 261, 31, "Paste and Search", reset_perks(self)) # TODO: add paste function
-        btnReset = create_button(self, 660, 840, 171, 31, "Reset", reset_perks(self))
+        btnPaste = create_button(self, 380, 840, 261, 31, "Paste and Search") # TODO: add paste function
+        btnReset = create_button(self, 660, 840, 171, 31, "Reset")
         btnPaste.clicked.connect(lambda: reset_perks(self)) # TODO: add paste function
         btnReset.clicked.connect(lambda: reset_perks(self))
         
