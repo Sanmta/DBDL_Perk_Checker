@@ -15,17 +15,20 @@ def compareImages(imageA, imageB):
     s = ssim(imageA, imageB)
     return m, s
 
-# resize image to target shape (used to resize reference image to match ROI)
-def resizeImage(image, target_image):
-        return cv2.resize(image, (target_shape[1], target_shape[0]))
+# # resize image to target shape (used to resize reference image to match ROI) //OUTDATED//
+# def resizeImage(image, target_image):
+#         return cv2.resize(image, (target_shape[1], target_shape[0]))
 
 # search function
 def search():
-    main_image=cv2.imread('assets/test2.png') # for now loads static image, will add functionality to load image from user clipboard
+    main_image=cv2.imread('testing/test2.png') # for now loads static image, will add functionality to load image from user clipboard
     main_image_gray=cv2.cvtColor(main_image, cv2.COLOR_BGR2GRAY) # convert to grayscale
 
+    # define the list of ROIs using nested loops
     rois = [
-        (441, 312, 34, 34) # (x, y, width, height)
+    ((37 * j) + 441, (79 * i) + 312, 34, 34)  # (x, y, width, height)
+    for i in range(4)  # Loop for survivors
+    for j in range(4)  # Loop for perks
     ]
 
     # performed testing with standard pngs, then with pngs along with perk backgrounds, however the accuracy was low
