@@ -11,6 +11,9 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QCompleter, QMessageBox
 from PIL import ImageGrab
 import os
+import cv2
+import numpy as np
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -40,7 +43,7 @@ class Ui_MainWindow(object):
         # create buttons
         btnPaste = create_button(self, 380, 840, 261, 31, "Paste and Search") # TODO: add paste function
         btnReset = create_button(self, 660, 840, 171, 31, "Reset")
-        btnPaste.clicked.connect(lambda: paste_image()) # TODO: add paste function
+        btnPaste.clicked.connect(lambda: paste_image(self)) # TODO: add paste function
         btnReset.clicked.connect(lambda: reset_perks(self))
         
         # set central widget
@@ -51,23 +54,81 @@ class Ui_MainWindow(object):
         MainWindow.setWindowIcon(QtGui.QIcon("assets/DBDL.png"))
         MainWindow.show()
 
-def paste_image():
+def paste_image(self):
     # load the image from clipboard
     clipboard_image = ImageGrab.grabclipboard()  
-    if clipboard_image is None:
-        print('No image found in clipboard')
-        show_error_message('Error', 'No image found in clipboard')
-        return
+
+    # Check if an image is found in the clipboard and if its size is 1920x1080
+    if clipboard_image is not None and clipboard_image.size == (1920, 1032):
+        # Convert the Pillow Image to a NumPy array
+        end_screen = cv2.cvtColor(np.array(clipboard_image), cv2.COLOR_RGB2BGR)
+        create_perk_arrays(self, search(end_screen))
+    elif clipboard_image is None:
+        show_error_message("Error", "No image found in clipboard.")
     else:
-        search(clipboard_image)
+        print(clipboard_image.size)
+        show_error_message("Error", "Image size is not 1920x1080.")
     
+def create_perk_arrays(self, perks):
+    build1 = perks[0:4]
+    build2 = perks[4:8]
+    build3 = perks[8:12]
+    build4 = perks[12:16]
+
+    # check build 1
+    if (check_perks(self, build1, 1) == True):
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_1_Valid").show()
+    else:
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_1_Valid").setText("Invalid!")
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_1_Valid").show()
+    # check build 2
+    if (check_perks(self, build2, 2) == True):
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_2_Valid").show()
+    else:
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_2_Valid").setText("Invalid!")
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_2_Valid").show()
+    # check build 3
+    if (check_perks(self, build3, 3) == True):
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_3_Valid").show()
+    else:
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_3_Valid").setText("Invalid!")
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_3_Valid").show()
+    # check build 4
+    if (check_perks(self, build4, 4) == True):
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_4_Valid").show()
+    else:
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_4_Valid").setText("Invalid!")
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_4_Valid").show()
+
+def check_perks(self, build, survivor_no):
+    correct_perks = 0
+    for perk in build:  # Iterate over each perk in the build
+        perk_name = perk.split('_')[1].replace(".jpg", "")  # Extract the perk name
+        
+        for i in range(1, 5):  # Iterate over the perk search bars
+            perk_search_bar = self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_" + str(i) + "_Surv_" + str(survivor_no))
+            formatted_perk_name = format_perk_name(perk_search_bar.text())
+            print("Checking for: " + perk_name)
+            print(formatted_perk_name)
+            if (perk_name.lower() == formatted_perk_name.lower()):
+                print("Perk " + perk_name + " is correct for survivor " + str(survivor_no))
+                correct_perks += 1
+                break  # Exit the inner loop if a match is found
+            if (i == 4):
+                show_error_message("Perk Invalid", perk_name + " is incorrect for survivor " + str(survivor_no))
+    if correct_perks == 4:
+        return True
+    else:
+        return False
+
+
 def show_error_message(title, message):
-    message_box = QMessageBox()
-    message_box.setIcon(QMessageBox.Icon.Critical)
-    message_box.setWindowTitle(title)
-    message_box.setText(message)
-    message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
-    message_box.exec()
+    messageBox = QMessageBox()
+    messageBox.setIcon(QMessageBox.Icon.Critical)
+    messageBox.setWindowTitle(title)
+    messageBox.setText(message)
+    messageBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+    messageBox.exec()
 
 # function to create a label for each survivor
 def create_survivor_label(self, survivor_no, x, y):
@@ -114,13 +175,14 @@ def create_perk_icon(self, perk_no, survivor_no, x, y):
     perkIconBG = QtWidgets.QLabel(parent=self.centralwidget)
     perkIconBG.setGeometry(QtCore.QRect(x, y, 150, 150))
     perkIconBG.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
+    #perkIconBG.setProperty("Valid", False)\\\\\\\\\\\\\\\\
     perkIconBG.setScaledContents(True)
 
     # create perk icon over background
     perkIcon = QtWidgets.QLabel(parent=self.centralwidget)
     perkIcon.setGeometry(QtCore.QRect(x, y, 150, 150))
     perkIcon.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
-    perkIcon.setProperty("Valid", False)
+    #perkIcon.setProperty("Valid", False) \\\\\\\\\\\\\\
     perkIcon.setScaledContents(True)
     perkIcon.setObjectName("lblPerk_" + perk_no + "_Surv_" + survivor_no)     
 
@@ -145,11 +207,11 @@ def try_icon_update(perkSearchBar, perkIcon):
     perk = format_perk_name(perkSearchBar.text())
     if perk_exists(perk) == True:
         perkIcon.setPixmap(QtGui.QPixmap("assets/perks/iconPerks_" + perk + ".png")) # update icon if exists
-        perkIcon.setProperty("Valid", True) # set property to true (this will be used to check if the build is valid)
+        perkSearchBar.setProperty("Real", True) # set property to true (this will be used to check if the build is valid)\\\\\\\\\\\
         perkIcon.show() # show icon
         return True
     else:
-        perkIcon.setProperty("Valid", False) # set property to false
+        perkSearchBar.setProperty("Real", False) # set property to false\\\\\\\\\\\\\\\\\
         perkIcon.hide() # hide icon
         return False
 
@@ -204,8 +266,9 @@ def reset_perks(self):
 
 # function to format perk name into valid path to locate the perk icon
 def format_perk_name(input_string):
-    # Remove : ' - and spaces from the string
-    formatted_string = input_string.replace(":", "").replace("'", "").replace(" ", "").replace("-", "")
+    # Remove : ' - and extra spaces from the string
+    formatted_string = input_string.replace(":", "").replace("'", "").replace("-", "").replace(" ", "")
+    # Capitalize each word individually
     formatted_string = " ".join(word.capitalize() for word in formatted_string.split())
     return formatted_string
 
