@@ -15,21 +15,18 @@ def compareImages(imageA, imageB):
     s = ssim(imageA, imageB)
     return m, s
 
-# # resize image to target shape (used to resize reference image to match ROI) //OUTDATED//
-# def resizeImage(image, target_image):
-#         return cv2.resize(image, (target_shape[1], target_shape[0]))
-
 # search function
 def search():
-    main_image=cv2.imread('testing/test2.png') # for now loads static image, will add functionality to load image from user clipboard
+    main_image=cv2.imread('testing/test5.png') # for now loads static image, will add functionality to load image from user clipboard
     main_image_gray=cv2.cvtColor(main_image, cv2.COLOR_BGR2GRAY) # convert to grayscale
 
     # define the list of ROIs using nested loops
     rois = [
-    ((37 * j) + 441, (79 * i) + 312, 34, 34)  # (x, y, width, height)
-    for i in range(4)  # Loop for survivors
-    for j in range(4)  # Loop for perks
+        ((37 * j) + 441, (79 * i) + 312, 34, 34) if j == 1 else ((37 * j) + 442, (79 * i) + 312, 34, 34)  # (x, y, width, height)
+        for i in range(4)  # Loop for survivors
+        for j in range(4)  # Loop for perks
     ]
+
 
     # performed testing with standard pngs, then with pngs along with perk backgrounds, however the accuracy was low
     reference_files = os.listdir('assets/jpgPerks') # get list of reference jpegs (pngs seem to have a lower accuracy)
@@ -46,33 +43,43 @@ def search():
 
 
     for i, (x, y, w, h) in enumerate(rois):
+        # get the region of interest (ROI) from the main image
         roi = main_image_gray[y:y+h, x:x+w]
 
-           # Apply thresholding to make black colors blacker
-        _, thresholded_roi = cv2.threshold(roi, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+        # apply thresholding to make black colors blacker
+        _, thresholded_roi = cv2.threshold(roi, 106, 255, cv2.THRESH_BINARY) 
 
-        mse_result = 0
+        # default values for best mse and best ssim
+        mse_result = 0 # CURRENTLY UNUSED FOR COPARISON BUT HERE IN CASE NEEDED LATER
         ssim_result = 0
+
+        # compare all images in the reference list to the current ROI
         for j, reference_image in enumerate(resized_reference_images):
-            threshold_needed = False
+            threshold_needed = False # flag to indicate if thresholding is needed (essentially, "is it an eye perk?")
             m, s = compareImages(roi, reference_image)
-            if s > ssim_result:
+            if s > ssim_result: # if the ssim value is greater than the current best ssim value, set new best match
                 mse_result = m
                 ssim_result = s
                 best_match = j
-
+                # print(f'MSE: {mse_result}, SSIM: {ssim_result} for {reference_files[j]}')
+        
+        # if the best match is an eye perk, apply thresholding to the ROI and compare again as they are harder to match
         if "DejaVu" in reference_files[best_match] or "ObjectOfObsession" in reference_files[best_match] or "DarkSense" in reference_files[best_match] or "Kindred" in reference_files[best_match]:
-            threshold_needed = True
+            threshold_needed = True # flag to indicate that thresholding is needed
+            cv2.imwrite('assets/threshold.png', thresholded_roi, [cv2.IMWRITE_PNG_COMPRESSION, 0]) # save thresholded ROI for debugging
+            
+            # new default values for best mse and best ssim for thresholded image
             ssim_result_threshold = 0
             mse_result_threshold = 0
             for k, reference_image in enumerate(resized_reference_images):
-                n, r = compareImages(thresholded_roi, reference_image)
+                n, r = compareImages(thresholded_roi, reference_image) # compare thresholded ROI to reference image
                 if r > ssim_result_threshold:
                     mse_result_threshold = n
                     ssim_result_threshold = r
                     best_match_threshold = k
-        cv2.imwrite('assets/r.png', thresholded_roi, [cv2.IMWRITE_PNG_COMPRESSION, 0])
-            
+                    #print(reference_files[best_match_threshold])
+                
+        # write to files for debugging, will be removed in final version
         file_name = 'assets/result'+ str(i) +'.png'
         cv2.imwrite(file_name, roi, [cv2.IMWRITE_PNG_COMPRESSION, 0])
         cv2.imwrite('assets/HighQualResult.png', reference_images[best_match], [cv2.IMWRITE_PNG_COMPRESSION, 0])
