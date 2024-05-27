@@ -1,7 +1,7 @@
 
 <h1 align="center">
   <br>
-  <a href=""><img src="https://github.com/Sanmta/DBDL_Perk_Checker/blob/main/assets/DBDL.png?raw=true" alt="DBDLeague" width="200"></a>
+  <a href="https://discord.gg/dbdleague"><img src="https://github.com/Sanmta/DBDL_Perk_Checker/blob/main/assets/DBDL.png?raw=true" alt="DBDLeague" width="200"></a>
   <br>
   DBDLeague Perk Checker
   <br>
@@ -56,6 +56,6 @@ MIT License
 ---
 
 > GitHub [@sanmta](https://github.com/sanmta) &nbsp;&middot;&nbsp;
-> Twitter [@sanmta_](https://twitter.com/sanmta_)
-> Discord [sanmta]
+> Twitter [@sanmta_](https://twitter.com/sanmta_) &nbsp;&middot;&nbsp;
+> Discord [@sanmta]
 
