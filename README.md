@@ -3,7 +3,7 @@
   <br>
   <a href=""><img src="https://github.com/Sanmta/DBDL_Perk_Checker/blob/main/assets/DBDL.png?raw=true" alt="DBDLeague" width="200"></a>
   <br>
-  DBDLeague Perk Cgecker
+  DBDLeague Perk Checker
   <br>
 </h1>
 
