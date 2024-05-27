@@ -17,7 +17,7 @@ def compareImages(imageA, imageB):
 
 # search function
 def search():
-    main_image=cv2.imread('testing/test5.png') # for now loads static image, will add functionality to load image from user clipboard
+    main_image=cv2.imread('testing/test5/test5.png') # for now loads static image, will add functionality to load image from user clipboard
     main_image_gray=cv2.cvtColor(main_image, cv2.COLOR_BGR2GRAY) # convert to grayscale
 
     # define the list of ROIs using nested loops
@@ -66,7 +66,7 @@ def search():
         # if the best match is an eye perk, apply thresholding to the ROI and compare again as they are harder to match
         if "DejaVu" in reference_files[best_match] or "ObjectOfObsession" in reference_files[best_match] or "DarkSense" in reference_files[best_match] or "Kindred" in reference_files[best_match]:
             threshold_needed = True # flag to indicate that thresholding is needed
-            cv2.imwrite('assets/threshold.png', thresholded_roi, [cv2.IMWRITE_PNG_COMPRESSION, 0]) # save thresholded ROI for debugging
+            cv2.imwrite('testing/test5/threshold.png', thresholded_roi, [cv2.IMWRITE_PNG_COMPRESSION, 0]) # save thresholded ROI for debugging
             
             # new default values for best mse and best ssim for thresholded image
             ssim_result_threshold = 0
@@ -80,10 +80,10 @@ def search():
                     #print(reference_files[best_match_threshold])
                 
         # write to files for debugging, will be removed in final version
-        file_name = 'assets/result'+ str(i) +'.png'
+        file_name = 'testing/test5/test5Perk'+ str(i) +'.png'
         cv2.imwrite(file_name, roi, [cv2.IMWRITE_PNG_COMPRESSION, 0])
-        cv2.imwrite('assets/HighQualResult.png', reference_images[best_match], [cv2.IMWRITE_PNG_COMPRESSION, 0])
-        cv2.imwrite('assets/lowQualResult.png', resized_reference_images[best_match], [cv2.IMWRITE_PNG_COMPRESSION, 0])
+        cv2.imwrite('testing/test5/test5HighQualRef.png', reference_images[best_match], [cv2.IMWRITE_PNG_COMPRESSION, 0])
+        cv2.imwrite('testing/test5/test5LowQualRef.png', resized_reference_images[best_match], [cv2.IMWRITE_PNG_COMPRESSION, 0])
         if threshold_needed == True:
            print(f'Best match for ROI {i+1}: Reference {reference_files[best_match_threshold]}')
         else: 
