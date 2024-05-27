@@ -46,7 +46,7 @@ $ python ./main_window.py
 
 ## Download
 
-You can [download](https://github.com/Sanmta/DBDL_Perk_Checker/releases/tag/v1.0.1) the latest version of the source code, which is available for Windows
+You can [download](https://github.com/Sanmta/DBDL_Perk_Checker/releases/tag/v1.0.2) the latest version of the source code, which is available for Windows
 
 
 ## License
