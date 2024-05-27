@@ -1,7 +1,6 @@
 import cv2
 import os
 import numpy as np
-import matplotlib.pyplot as plt
 from skimage.metrics import structural_similarity as ssim
 
 # function to compute mean squared error (MSE) between two images (average squared difference per pixel)
