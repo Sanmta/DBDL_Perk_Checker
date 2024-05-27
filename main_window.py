@@ -342,7 +342,7 @@ def list_of_all_perks():
         'Power Struggle',
         'Premonition',
         'Prove Thyself',
-        'Quick & Quiet',
+        'Quick and Quiet',
         'Quick Gambit',
         'Reactive Healing',
         'Reassurance',
