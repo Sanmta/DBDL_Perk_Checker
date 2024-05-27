@@ -84,17 +84,17 @@ def search(end_screen):
                     ssim_result_threshold = r
                     best_match_threshold = k
                     #print(reference_files[best_match_threshold])
-                    
+
         # write to files for debugging, will be removed in final version
         file_name = 'testing/test5/test5Perk'+ str(i) +'.png'
         cv2.imwrite(file_name, roi, [cv2.IMWRITE_PNG_COMPRESSION, 0])
         cv2.imwrite('testing/test5/test5HighQualRef.png', reference_images[best_match], [cv2.IMWRITE_PNG_COMPRESSION, 0])
         cv2.imwrite('testing/test5/test5LowQualRef.png', resized_reference_images[best_match], [cv2.IMWRITE_PNG_COMPRESSION, 0])
         if threshold_needed == True:
-           print(f'Best match for ROI {i+1}: Reference {reference_files[best_match_threshold]}')
+           #print(f'Best match for ROI {i+1}: Reference {reference_files[best_match_threshold]}')
            recognisedPerks.insert(i, reference_files[best_match_threshold])
         else: 
-            print(f'Best match for ROI {i+1}: Reference {reference_files[best_match]}')
+            #print(f'Best match for ROI {i+1}: Reference {reference_files[best_match]}')
             recognisedPerks.insert(i, reference_files[best_match])    
     return recognisedPerks
         

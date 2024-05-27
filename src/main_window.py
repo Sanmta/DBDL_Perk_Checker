@@ -36,7 +36,7 @@ class Ui_MainWindow(object):
             create_survivor_label(self, str(i), 30, 120 + 200*(i-1)) # create a label for each survivor
             create_valid_label(self, str(i), 1050, 120 + 200*(i-1)) # create a valid label for each survivor
             for j in range(1, 5): # 4 perks per survivor
-                create_perk_icon(self, str(j), str(i), 225*(j-1) + 200, 200*(i-1) + 40) # create a perk icon for each perk
+                create_perk_icon(self, str(j), str(i), 225*(j-1) + 200, 200*(i-1) + 50) # create a perk icon for each perk
                 create_perk_search_bar(self, str(j), str(i), 225 * j - 25, 200*(i-1) + 20) # create a search bar for each perk
                 # line_edit = self.centralwidget.findChild(QtWidgets.QLineEdit, "linePerk" + str(j) + "Surv" + str(i))
 
@@ -66,61 +66,39 @@ def paste_image(self):
     elif clipboard_image is None:
         show_error_message("Error", "No image found in clipboard.")
     else:
-        print(clipboard_image.size)
+        #print(clipboard_image.size)
         show_error_message("Error", "Image size is not 1920x1080.")
     
 def create_perk_arrays(self, perks):
-    build1 = perks[0:4]
-    build2 = perks[4:8]
-    build3 = perks[8:12]
-    build4 = perks[12:16]
+    detectedbuild1 = [perk.replace("iconPerks_", "").replace(".jpg", "").lower() for perk in perks[0:4]]
+    detectedbuild2 = [perk.replace("iconPerks_", "").replace(".jpg", "").lower() for perk in perks[4:8]]
+    detectedbuild3 = [perk.replace("iconPerks_", "").replace(".jpg", "").lower() for perk in perks[8:12]]
+    detectedbuild4 = [perk.replace("iconPerks_", "").replace(".jpg", "").lower() for perk in perks[12:16]]
+    #print(detectedbuild1)
 
-    # check build 1
-    if (check_perks(self, build1, 1) == True):
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_1_Valid").show()
-    else:
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_1_Valid").setText("Invalid!")
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_1_Valid").show()
-    # check build 2
-    if (check_perks(self, build2, 2) == True):
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_2_Valid").show()
-    else:
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_2_Valid").setText("Invalid!")
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_2_Valid").show()
-    # check build 3
-    if (check_perks(self, build3, 3) == True):
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_3_Valid").show()
-    else:
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_3_Valid").setText("Invalid!")
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_3_Valid").show()
-    # check build 4
-    if (check_perks(self, build4, 4) == True):
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_4_Valid").show()
-    else:
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_4_Valid").setText("Invalid!")
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_4_Valid").show()
+    expectedbuild1 = [format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Surv_1").text()).lower(), format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Surv_1").text()).lower(), format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Surv_1").text()).lower(), format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Surv_1").text()).lower()]
+    expectedbuild2 = [format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Surv_2").text()).lower(), format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Surv_2").text()).lower(), format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Surv_2").text()).lower(), format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Surv_2").text()).lower()]
+    expectedbuild3 = [format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Surv_3").text()).lower(), format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Surv_3").text()).lower(), format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Surv_3").text()).lower(), format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Surv_3").text()).lower()]
+    expectedbuild4 = [format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Surv_4").text()).lower(), format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Surv_4").text()).lower(), format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Surv_4").text()).lower(), format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Surv_4").text()).lower()]
+    #print(expectedbuild1)
 
-def check_perks(self, build, survivor_no):
-    correct_perks = 0
-    for perk in build:  # Iterate over each perk in the build
-        perk_name = perk.split('_')[1].replace(".jpg", "")  # Extract the perk name
-        
-        for i in range(1, 5):  # Iterate over the perk search bars
-            perk_search_bar = self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_" + str(i) + "_Surv_" + str(survivor_no))
-            formatted_perk_name = format_perk_name(perk_search_bar.text())
-            print("Checking for: " + perk_name)
-            print(formatted_perk_name)
-            if (perk_name.lower() == formatted_perk_name.lower()):
-                print("Perk " + perk_name + " is correct for survivor " + str(survivor_no))
-                correct_perks += 1
-                break  # Exit the inner loop if a match is found
-            if (i == 4):
-                show_error_message("Perk Invalid", perk_name + " is incorrect for survivor " + str(survivor_no))
-    if correct_perks == 4:
-        return True
-    else:
-        return False
+    check_perks(self, detectedbuild1, detectedbuild2, detectedbuild3, detectedbuild4, expectedbuild1, 1)
+    check_perks(self, detectedbuild1, detectedbuild2, detectedbuild3, detectedbuild4, expectedbuild2, 2)
+    check_perks(self, detectedbuild1, detectedbuild2, detectedbuild3, detectedbuild4, expectedbuild3, 3)
+    check_perks(self, detectedbuild1, detectedbuild2, detectedbuild3, detectedbuild4, expectedbuild4, 4)
 
+# function to check if the perks in the build exist
+def check_perks(self, d1, d2, d3, d4, expectedbuild, build_no):
+    if (sorted(d1) == sorted(expectedbuild)) == True:
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(build_no) + "_Valid").show()
+    elif (sorted(d2) == sorted(expectedbuild)) == True:
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(build_no) + "_Valid").show()
+    elif (sorted(d3) == sorted(expectedbuild)) == True:
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(build_no) + "_Valid").show()
+    elif (sorted(d4) == sorted(expectedbuild)) == True:
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(build_no) + "_Valid").show()
+    else:
+        show_error_message("Error", "Build " + str(build_no) + " not found.")
 
 def show_error_message(title, message):
     messageBox = QMessageBox()
@@ -260,6 +238,7 @@ def create_button(self, x, y, width, height, text):
 # function to reset all perk search bars, this will in turn reset all the perk icons
 def reset_perks(self):
     for i in range(1, 5): # 4 survivors
+        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(i) + "_Valid").hide()
         for j in range(1, 5): # 4 perks per survivor
             line_edit = self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_" + str(j) + "_Surv_" + str(i))
             line_edit.clear()
