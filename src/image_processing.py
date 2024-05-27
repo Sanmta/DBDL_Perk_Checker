@@ -1,7 +1,11 @@
 import cv2
 import os
 import numpy as np
+import matplotlib.pyplot as plt
 from skimage.metrics import structural_similarity as ssim
+
+
+
 
 # compute mean squared error (MSE) between two images (average squared difference per pixel)
 def mse(imageA, imageB):
@@ -16,9 +20,11 @@ def compareImages(imageA, imageB):
     return m, s
 
 # search function
-def search():
-    main_image=cv2.imread('testing/test5/test5.png') # for now loads static image, will add functionality to load image from user clipboard
-    main_image_gray=cv2.cvtColor(main_image, cv2.COLOR_BGR2GRAY) # convert to grayscale
+def search(clipboard_image):
+    # Convert the Pillow Image to a NumPy array
+    end_screen = np.array(clipboard_image)
+
+    end_screen_gray=cv2.cvtColor(end_screen, cv2.COLOR_BGR2GRAY) # convert to grayscale
 
     # define the list of ROIs using nested loops
     rois = [
@@ -44,7 +50,7 @@ def search():
 
     for i, (x, y, w, h) in enumerate(rois):
         # get the region of interest (ROI) from the main image
-        roi = main_image_gray[y:y+h, x:x+w]
+        roi = end_screen_gray[y:y+h, x:x+w]
 
         # apply thresholding to make black colors blacker
         _, thresholded_roi = cv2.threshold(roi, 106, 255, cv2.THRESH_BINARY) 
