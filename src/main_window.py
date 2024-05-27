@@ -8,7 +8,8 @@
 
 from image_processing import search
 from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtWidgets import QCompleter
+from PyQt6.QtWidgets import QCompleter, QMessageBox
+from PIL import ImageGrab
 import os
 
 class Ui_MainWindow(object):
@@ -39,7 +40,7 @@ class Ui_MainWindow(object):
         # create buttons
         btnPaste = create_button(self, 380, 840, 261, 31, "Paste and Search") # TODO: add paste function
         btnReset = create_button(self, 660, 840, 171, 31, "Reset")
-        btnPaste.clicked.connect(lambda: search()) # TODO: add paste function
+        btnPaste.clicked.connect(lambda: paste_image()) # TODO: add paste function
         btnReset.clicked.connect(lambda: reset_perks(self))
         
         # set central widget
@@ -49,6 +50,24 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle("DBDL Perk Checker")
         MainWindow.setWindowIcon(QtGui.QIcon("assets/DBDL.png"))
         MainWindow.show()
+
+def paste_image():
+    # load the image from clipboard
+    clipboard_image = ImageGrab.grabclipboard()  
+    if clipboard_image is None:
+        print('No image found in clipboard')
+        show_error_message('Error', 'No image found in clipboard')
+        return
+    else:
+        search(clipboard_image)
+    
+def show_error_message(title, message):
+    message_box = QMessageBox()
+    message_box.setIcon(QMessageBox.Icon.Critical)
+    message_box.setWindowTitle(title)
+    message_box.setText(message)
+    message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
+    message_box.exec()
 
 # function to create a label for each survivor
 def create_survivor_label(self, survivor_no, x, y):
