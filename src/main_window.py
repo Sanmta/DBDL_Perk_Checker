@@ -78,179 +78,159 @@ def paste_image(self):
     
 # function to create arrays of both selected perks and detected perks
 def create_perk_arrays(self, perks):
-    detectedbuild1 = [perk.replace("iconPerks_", "").replace(".jpg", "").lower() for perk in perks[0:4]]
-    detectedbuild2 = [perk.replace("iconPerks_", "").replace(".jpg", "").lower() for perk in perks[4:8]]
-    detectedbuild3 = [perk.replace("iconPerks_", "").replace(".jpg", "").lower() for perk in perks[8:12]]
-    detectedbuild4 = [perk.replace("iconPerks_", "").replace(".jpg", "").lower() for perk in perks[12:16]]
+    detected_build1 = [perk.replace("iconPerks_", "").replace(".jpg", "").lower() for perk in perks[0:4]]
+    detected_build2 = [perk.replace("iconPerks_", "").replace(".jpg", "").lower() for perk in perks[4:8]]
+    detected_build3 = [perk.replace("iconPerks_", "").replace(".jpg", "").lower() for perk in perks[8:12]]
+    detected_build4 = [perk.replace("iconPerks_", "").replace(".jpg", "").lower() for perk in perks[12:16]]
 
-    expectedbuild1 = [
+    expected_build1 = [
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Surv_1").text()).lower(),
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Surv_1").text()).lower(),
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Surv_1").text()).lower(),
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Surv_1").text()).lower()
     ]
     
-    expectedbuild2 = [
+    expected_build2 = [
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Surv_2").text()).lower(), 
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Surv_2").text()).lower(), 
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Surv_2").text()).lower(), 
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Surv_2").text()).lower()
     ]
     
-    expectedbuild3 = [
+    expected_build3 = [
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Surv_3").text()).lower(),
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Surv_3").text()).lower(),
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Surv_3").text()).lower(),
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Surv_3").text()).lower()
     ]
 
-    expectedbuild4 = [
+    expected_build4 = [
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Surv_4").text()).lower(), 
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Surv_4").text()).lower(), 
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Surv_4").text()).lower(), 
         format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Surv_4").text()).lower()
     ]
 
-    check_perks(self, detectedbuild1, detectedbuild2, detectedbuild3, detectedbuild4, expectedbuild1, 1)
-    check_perks(self, detectedbuild1, detectedbuild2, detectedbuild3, detectedbuild4, expectedbuild2, 2)
-    check_perks(self, detectedbuild1, detectedbuild2, detectedbuild3, detectedbuild4, expectedbuild3, 3)
-    check_perks(self, detectedbuild1, detectedbuild2, detectedbuild3, detectedbuild4, expectedbuild4, 4)
+    check_perks(self, detected_build1, detected_build2, detected_build3, detected_build4, expected_build1, 1)
+    check_perks(self, detected_build1, detected_build2, detected_build3, detected_build4, expected_build2, 2)
+    check_perks(self, detected_build1, detected_build2, detected_build3, detected_build4, expected_build3, 3)
+    check_perks(self, detected_build1, detected_build2, detected_build3, detected_build4, expected_build4, 4)
 
 # function to check if the perks in the build exist
-def check_perks(self, d1, d2, d3, d4, expectedbuild, build_no):
-    if ((sorted(d1) == sorted(expectedbuild)) == True):
+def check_perks(self, d1, d2, d3, d4, expected_build, build_no):
+    if ((sorted(d1) == sorted(expected_build)) == True):
         self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(build_no) + "_Valid").show()
-    elif ((sorted(d2) == sorted(expectedbuild)) == True):
+    elif ((sorted(d2) == sorted(expected_build)) == True):
         self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(build_no) + "_Valid").show()
-    elif ((sorted(d3) == sorted(expectedbuild)) == True):
+    elif ((sorted(d3) == sorted(expected_build)) == True):
         self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(build_no) + "_Valid").show()
-    elif ((sorted(d4) == sorted(expectedbuild)) == True):
+    elif ((sorted(d4) == sorted(expected_build)) == True):
         self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(build_no) + "_Valid").show()
     else:
         show_error_message("Error", "Build " + str(build_no) + " not found.")
 
 # function to show an error message
 def show_error_message(title, message):
-    messageBox = QMessageBox()
-    messageBox.setIcon(QMessageBox.Icon.Critical)
-    messageBox.setWindowTitle(title)
-    messageBox.setText(message)
-    messageBox.setStandardButtons(QMessageBox.StandardButton.Ok)
-    messageBox.exec()
+    message_box = QMessageBox()
+    message_box.setIcon(QMessageBox.Icon.Critical)
+    message_box.setWindowTitle(title)
+    message_box.setText(message)
+    message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
+    message_box.exec()
 
 # function to create a label for each survivor
 def create_survivor_label(self, survivor_no, x, y):
     _translate = QtCore.QCoreApplication.translate
-    labelSurvivor = QtWidgets.QLabel(parent=self.centralwidget)
-    labelSurvivor.setGeometry(QtCore.QRect(x, y, 101, 21))
+    label_survivor = QtWidgets.QLabel(parent=self.centralwidget)
+    label_survivor.setGeometry(QtCore.QRect(x, y, 101, 21))
     font = QtGui.QFont()
     font.setFamily("Roboto")
     font.setPointSize(16)
-    labelSurvivor.setFont(font)
-    labelSurvivor.setObjectName("lblSurvivor_" + survivor_no)
-    labelSurvivor.setText(_translate("MainWindow", "Survivor "  + survivor_no + ":"))
+    label_survivor.setFont(font)
+    label_survivor.setObjectName("lblSurvivor_" + survivor_no)
+    label_survivor.setText(_translate("MainWindow", "Survivor "  + survivor_no + ":"))
 
 # function to create a "valid" label for each build
 def create_valid_label(self, survivor_no, x, y):
     _translate = QtCore.QCoreApplication.translate
-    labelValid = QtWidgets.QLabel(parent=self.centralwidget)
-    labelValid.setGeometry(QtCore.QRect(x, y, 101, 21))
+    label_valid = QtWidgets.QLabel(parent=self.centralwidget)
+    label_valid.setGeometry(QtCore.QRect(x, y, 101, 21))
     font = QtGui.QFont()
     font.setFamily("Roboto")
     font.setPointSize(16)
-    labelValid.setFont(font)
-    labelValid.setObjectName("lblSurv_" + survivor_no + "_Valid")
-    labelValid.setText(_translate("MainWindow", "Valid!"))
-    labelValid.hide()
+    label_valid.setFont(font)
+    label_valid.setObjectName("lblSurv_" + survivor_no + "_Valid")
+    label_valid.setText(_translate("MainWindow", "Valid!"))
+    label_valid.hide()
 
 # function to create a perk icon for each perk
 def create_perk_icon(self, perk_no, survivor_no, x, y):
-    # perkIconBG = QtWidgets.QLabel(parent=self.centralwidget)
-    # perkIconBG.setGeometry(QtCore.QRect(x, y, 150, 150))
-    # perkIconBG.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
-    # perkIconBG.setScaledContents(True)
-    
-    perkIcon = QtWidgets.QLabel(parent=self.centralwidget)
-    perkIcon.setGeometry(QtCore.QRect(x, y, 150, 150))
-    perkIcon.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
-    perkIcon.setScaledContents(True)
-    perkIcon.setObjectName("lblPerk_" + perk_no + "_Surv_" + survivor_no)     
+    # create background for icon
+    perk_icon_bg = QtWidgets.QLabel(parent=self.centralwidget)
+    perk_icon_bg.setGeometry(QtCore.QRect(x, y, 150, 150))
+    perk_icon_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
+    perk_icon_bg.setScaledContents(True)
+    # create icon on top of background
+    perk_icon = QtWidgets.QLabel(parent=self.centralwidget)
+    perk_icon.setGeometry(QtCore.QRect(x, y, 150, 150))
+    perk_icon.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
+    perk_icon.setScaledContents(True)
+    perk_icon.setObjectName("lblPerk_" + perk_no + "_Surv_" + survivor_no)     
 
 # function to try and update the perk icon when the search bar is changed
-def on_selection_changed(self, perkSearchBar):
-    object_name = perkSearchBar.objectName()
-
-    # get the perk number and survivor number from the object name
-    perk_no = object_name.split('_')[1]
+def on_selection_changed(self, perk_search_bar):
+    object_name = perk_search_bar.objectName()
+    perk_no = object_name.split('_')[1]  
     survivor_no = object_name.split('_')[3]
-
-    # get the perkIcon object
-    perkIcon = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerk_" + perk_no + "_Surv_" + survivor_no)
+    # get the perk_icon object
+    perk_icon = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerk_" + perk_no + "_Surv_" + survivor_no)
+    try_icon_update(perk_search_bar, perk_icon)
     
-    # call function
-    try_icon_update(perkSearchBar, perkIcon)
-    
-# function to update perk icon
-def try_icon_update(perkSearchBar, perkIcon):
-    # check if perk exists
-    perk = format_perk_name(perkSearchBar.text())
-    if perk_exists(perk) == True:
-        perkIcon.setPixmap(QtGui.QPixmap("assets/perks/iconPerks_" + perk + ".png")) # update icon if exists
-        perkSearchBar.setProperty("Real", True) # set property to true (this will be used to check if the build is valid)\\\\\\\\\\\
-        perkIcon.show() # show icon
+# function to update perk icon when selection box changes
+def try_icon_update(perk_search_bar, perk_icon):
+    perk = format_perk_name(perk_search_bar.text())
+    if (perk_exists(perk) == True):
+        perk_icon.setPixmap(QtGui.QPixmap("assets/perks/iconPerks_" + perk + ".png"))
+        perk_icon.show()
         return True
     else:
-        perkSearchBar.setProperty("Real", False) # set property to false\\\\\\\\\\\\\\\\\
-        perkIcon.hide() # hide icon
+        perk_icon.hide()
         return False
 
 # function to check if perk exists in the assets folder
 def perk_exists(perk_name):
-    if os.path.exists("assets/perks/iconPerks_" + perk_name + ".png"):
-        return True
-    else:
-        return False
+    if (os.path.exists("assets/perks/iconPerks_" + perk_name + ".png")): return True
+    else: return False
 
 # function to create a search bar for each perk
 def create_perk_search_bar(self, perk_no, survivor_no, x, y):
-    perkSearchBar = QtWidgets.QLineEdit(parent=self.centralwidget)
-
-    # set position
-    perkSearchBar.setGeometry(QtCore.QRect(x, y, 151, 22))
-    perkSearchBar.setObjectName("searchPerk_" + perk_no + "_Surv_" + survivor_no) 
-
-    # create completer
+    perk_search_bar = QtWidgets.QLineEdit(parent=self.centralwidget)
+    perk_search_bar.setGeometry(QtCore.QRect(x, y, 151, 22))
+    perk_search_bar.setObjectName("searchPerk_" + perk_no + "_Surv_" + survivor_no) 
+    # create completer for the search bar
     completer = list_of_all_perks()
     completer.setCaseSensitivity(QtCore.Qt.CaseSensitivity.CaseInsensitive)
-    perkSearchBar.setCompleter(completer)
+    perk_search_bar.setCompleter(completer)
+    perk_search_bar.textChanged.connect(lambda: on_selection_changed(self, perk_search_bar))
+    return perk_search_bar
 
-    # connect function to search bar when text changes
-    perkSearchBar.textChanged.connect(lambda: on_selection_changed(self, perkSearchBar))
-    return perkSearchBar
-
-# function to create a button
+# function to create a custom button
 def create_button(self, x, y, width, height, text):
     button = QtWidgets.QPushButton(parent=self.centralwidget)
-
-    # set position
     button.setGeometry(QtCore.QRect(x, y, width, height))
-
-    # set font & size
     font = QtGui.QFont()
     font.setFamily("Roboto")
     font.setPointSize(16)
     button.setFont(font)
-
-    # set object information
     button.setObjectName("btn_" + text)
     button.setText(text)
     return button
 
 # function to reset all perk search bars, this will in turn reset all the perk icons
 def reset_perks(self):
-    for i in range(1, 5): # 4 survivors
+    for i in range(1, 5):
         self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(i) + "_Valid").hide()
-        for j in range(1, 5): # 4 perks per survivor
+        for j in range(1, 5): 
             line_edit = self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_" + str(j) + "_Surv_" + str(i))
             line_edit.clear()
 
