@@ -4,9 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from skimage.metrics import structural_similarity as ssim
 
-
-
-
 # compute mean squared error (MSE) between two images (average squared difference per pixel)
 def mse(imageA, imageB):
     err = np.sum((imageA.astype("float") - imageB.astype("float")) ** 2)
