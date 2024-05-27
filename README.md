@@ -13,8 +13,6 @@
   <a href="#key-features">Key Features</a> •
   <a href="#how-to-use">How To Use</a> •
   <a href="#download">Download</a> •
-  <a href="#credits">Credits</a> •
-  <a href="#related">Related</a> •
   <a href="#license">License</a>
 </p>
 
@@ -48,7 +46,7 @@ $ python ./main_window.py
 
 ## Download
 
-You can [download](https://github.com/amitmerchant1990/electron-markdownify/releases/tag/v1.2.0) the latest installable version of Markdownify for Windows, macOS and Linux.
+You can [download](https://github.com/Sanmta/DBDL_Perk_Checker/releases/tag/v1.0.0) the latest version of the source code is downloadable for Windows
 
 
 ## License
