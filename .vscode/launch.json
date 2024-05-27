@@ -8,7 +8,7 @@
             "name": "Python Debugger: Current File",
             "type": "debugpy",
             "request": "launch",
-            "program": "src/image_processing.py",
+            "program": "main_window.py",
             "console": "integratedTerminal"
         }
     ]
