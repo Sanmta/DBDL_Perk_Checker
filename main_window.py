@@ -313,7 +313,7 @@ def reset_perks(self):
                 line_edit.clear()
 
                 perk_bg = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerkBG_" + str(j) + "_Build_" + str(i))
-                perk_bg.setPixmap(QtGui.QPixmap(""))
+                perk_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
 
 # function to format perk name into valid path to locate the perk icon
 def format_perk_name(input_string):
