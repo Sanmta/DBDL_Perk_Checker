@@ -242,7 +242,7 @@ def create_build_label(self, build_no, x, y):
 def create_perk_icon(self, perk_no, build_no, x, y):
     # create background for icon
     perk_icon_bg = QtWidgets.QLabel(parent=self.centralwidget)
-    perk_icon_bg.setGeometry(QtCore.QRect(x, y, 117, 117))
+    perk_icon_bg.setGeometry(QtCore.QRect(x, y, 125, 125))
     perk_icon_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
     perk_icon_bg.setScaledContents(True)
     perk_icon_bg.setObjectName("lblPerkBG_" + perk_no + "_Build_" + build_no)
