@@ -23,9 +23,14 @@ class Ui_MainWindow(object):
     def setup_ui(self, MainWindow):
         # main window setup
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1100, 900)
+        MainWindow.setFixedSize(1100, 900)
+        MainWindow.setSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
+        MainWindow.setWindowTitle("DBDL Perk Checker - by sanmta")
+        MainWindow.setWindowIcon(QtGui.QIcon("assets/DBDL.png"))
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        MainWindow.setCentralWidget(self.centralwidget)
+        create_background_label(self, 0, 0)
 
         # dictionary to hold line edit widgets
         self.line_edits = {
@@ -48,26 +53,20 @@ class Ui_MainWindow(object):
         }        
         
         for i in range(1, 5): 
-            create_build_label(self, str(i), 30, 120 + 200*(i-1)) 
+            create_build_label(self, str(i), 279, 25 + 202*(i-1)) 
             for j in range(1, 5):
-                create_perk_icon(self, str(j), str(i), 225*(j-1) + 200, 200*(i-1) + 50) 
-                create_perk_search_bar(self, str(j), str(i), 225 * j - 25, 200*(i-1) + 20) 
-
+                create_perk_icon(self, str(j), str(i), 180*(j) + 80, 205*(i-1) + 85) 
+                create_perk_search_bar(self, str(j), str(i), 180 * j + 80, 205*(i-1) + 58) 
 
         self.checkbox_eyes = create_checkbox(self, "Assume eye perks are Deja Vu", 40, 846, 200, 22)
         self.checkbox_eyes.stateChanged.connect(self.checkbox_toggled)
         
-
-        btn_paste = create_button(self, 380, 840, 261, 31, "Paste and Search")
+        btn_paste = create_button(self, 380, 840, 261, 31, "Check Perks")
         btn_reset = create_button(self, 660, 840, 171, 31, "Reset")
 
         btn_paste.clicked.connect(lambda: paste_image(self))
         btn_reset.clicked.connect(lambda: reset_perks(self))
-        
-        MainWindow.setCentralWidget(self.centralwidget)
 
-        MainWindow.setWindowTitle("DBDL Perk Checker")
-        MainWindow.setWindowIcon(QtGui.QIcon("assets/DBDL.png"))
         MainWindow.show()
 
     # function that controls effect of the checkbox being toggled
@@ -194,37 +193,62 @@ def show_error_message(title, message):
     message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
     message_box.exec()
 
+# function to show a confirmation message
+def show_are_you_sure_popup():
+    # Create a QMessageBox
+    msg_box = QMessageBox()
+
+    # Set the icon, title, and text
+    msg_box.setIcon(QMessageBox.Icon.Question)
+    msg_box.setWindowTitle("Confirmation")
+    msg_box.setText("Are you sure you want to proceed?")
+
+    # Add buttons for the user to confirm or cancel the action
+    msg_box.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+
+    # Execute the message box and return the user's response
+    return msg_box.exec()
+
 # function to create a checkbox widget
 def create_checkbox(self, text, x, y, w, h):
     checkbox = QCheckBox(parent=self.centralwidget)
     checkbox.setGeometry(QtCore.QRect(x, y, w, h))
     checkbox.setObjectName("chk_" + text)
     checkbox.setText(text)
+    checkbox.setChecked(True)
     return checkbox
+
+# function to create a background label
+def create_background_label(self, x, y):
+    _translate = QtCore.QCoreApplication.translate
+    label_build = QtWidgets.QLabel(parent=self.centralwidget)
+    label_build.setGeometry(QtCore.QRect(x, y, 1100, 900))
+    label_build.setPixmap(QtGui.QPixmap("assets/main_background.png"))
 
 # function to create a label for each build
 def create_build_label(self, build_no, x, y):
     _translate = QtCore.QCoreApplication.translate
     label_build = QtWidgets.QLabel(parent=self.centralwidget)
-    label_build.setGeometry(QtCore.QRect(x, y, 101, 21))
+    label_build.setGeometry(QtCore.QRect(x, y, 100, 22))
     font = QtGui.QFont()
-    font.setFamily("Roboto")
-    font.setPointSize(16)
+    font.setFamily("Roboto Condensed")
+    font.setBold(True)
+    font.setPointSize(23)
     label_build.setFont(font)
     label_build.setObjectName("lblBuild_" + build_no)
-    label_build.setText(_translate("MainWindow", "Build "  + build_no + ":"))
+    label_build.setText(_translate("MainWindow", "BUILD "  + build_no + ":"))
 
 # function to create a perk icon for each perk
 def create_perk_icon(self, perk_no, build_no, x, y):
     # create background for icon
     perk_icon_bg = QtWidgets.QLabel(parent=self.centralwidget)
-    perk_icon_bg.setGeometry(QtCore.QRect(x, y, 150, 150))
+    perk_icon_bg.setGeometry(QtCore.QRect(x, y, 117, 117))
     perk_icon_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
     perk_icon_bg.setScaledContents(True)
     perk_icon_bg.setObjectName("lblPerkBG_" + perk_no + "_Build_" + build_no)
     # create icon on top of background
     perk_icon = QtWidgets.QLabel(parent=self.centralwidget)
-    perk_icon.setGeometry(QtCore.QRect(x, y, 150, 150))
+    perk_icon.setGeometry(QtCore.QRect(x, y, 125, 125))
     perk_icon.setPixmap(QtGui.QPixmap(""))
     perk_icon.setScaledContents(True)
     perk_icon.setObjectName("lblPerk_" + perk_no + "_Build_" + build_no)     
@@ -257,7 +281,7 @@ def perk_exists(perk_name):
 # function to create a search bar for each perk
 def create_perk_search_bar(self, perk_no, build_no, x, y):
     perk_search_bar = QtWidgets.QLineEdit(parent=self.centralwidget)
-    perk_search_bar.setGeometry(QtCore.QRect(x, y, 151, 22))
+    perk_search_bar.setGeometry(QtCore.QRect(x, y, 130, 20))
     perk_search_bar.setObjectName("searchPerk_" + perk_no + "_Build_" + build_no) 
     # create completer for the search bar
     completer = list_of_all_perks()
@@ -280,13 +304,16 @@ def create_button(self, x, y, width, height, text):
 
 # function to reset all perk search bars, this will in turn reset all the perk icons
 def reset_perks(self):
-    for i in range(1, 5):
-        for j in range(1, 5): 
-            line_edit = self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_" + str(j) + "_Build_" + str(i))
-            line_edit.clear()
+    response = show_are_you_sure_popup()
+    
+    if response == QMessageBox.StandardButton.Yes:
+        for i in range(1, 5):
+            for j in range(1, 5): 
+                line_edit = self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_" + str(j) + "_Build_" + str(i))
+                line_edit.clear()
 
-            perk_bg = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerkBG_" + str(j) + "_Build_" + str(i))
-            perk_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
+                perk_bg = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerkBG_" + str(j) + "_Build_" + str(i))
+                perk_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
 
 # function to format perk name into valid path to locate the perk icon
 def format_perk_name(input_string):
