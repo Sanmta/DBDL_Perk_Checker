@@ -48,18 +48,18 @@ class Ui_MainWindow(object):
         }        
         
         for i in range(1, 5): 
-            create_build_label(self, str(i), 30, 200 + 200*(i-1)) 
+            create_build_label(self, str(i), 30, 120 + 200*(i-1)) 
             for j in range(1, 5):
-                create_perk_icon(self, str(j), str(i), 225*(j-1) + 200, 200*(i-1) + 130) 
-                create_perk_search_bar(self, str(j), str(i), 225 * j - 25, 200*(i-1) + 100) 
+                create_perk_icon(self, str(j), str(i), 225*(j-1) + 200, 200*(i-1) + 50) 
+                create_perk_search_bar(self, str(j), str(i), 225 * j - 25, 200*(i-1) + 20) 
 
 
-        self.checkbox_eyes = create_checkbox(self, "Assume eye perks are Deja Vu", 40, 25, 200, 22)
+        self.checkbox_eyes = create_checkbox(self, "Assume eye perks are Deja Vu", 40, 846, 200, 22)
         self.checkbox_eyes.stateChanged.connect(self.checkbox_toggled)
         
 
-        btn_paste = create_button(self, 380, 25, 261, 31, "Paste and Search")
-        btn_reset = create_button(self, 660, 25, 171, 31, "Reset")
+        btn_paste = create_button(self, 380, 840, 261, 31, "Paste and Search")
+        btn_reset = create_button(self, 660, 840, 171, 31, "Reset")
 
         btn_paste.clicked.connect(lambda: paste_image(self))
         btn_reset.clicked.connect(lambda: reset_perks(self))
@@ -93,8 +93,6 @@ def paste_image(self):
         show_error_message("Error", "No image found in clipboard.")
     else:
         show_error_message("Error", "Image size is not 1920x1080.")
-
-
 
 # function to create arrays of both selected perks and detected perks
 def create_perk_arrays(self, perks):
@@ -164,6 +162,7 @@ def check_perks(self, d1, d2, d3, d4, expected_build, build_no):
             set_perk_backgrounds(self, build_no, False, non_matching_d4)
             show_error_message("Error", f"{non_matching_d4} not found in build " + str(build_no) + ".")
 
+# function to set the background of the perk icons, green being a correct perk and red being incorrect
 def set_perk_backgrounds(self, build_no, correct, non_matching_values):
     if correct:    
         for perk_no in range(1, 5):
@@ -195,6 +194,7 @@ def show_error_message(title, message):
     message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
     message_box.exec()
 
+# function to create a checkbox widget
 def create_checkbox(self, text, x, y, w, h):
     checkbox = QCheckBox(parent=self.centralwidget)
     checkbox.setGeometry(QtCore.QRect(x, y, w, h))
@@ -213,7 +213,6 @@ def create_build_label(self, build_no, x, y):
     label_build.setFont(font)
     label_build.setObjectName("lblBuild_" + build_no)
     label_build.setText(_translate("MainWindow", "Build "  + build_no + ":"))
-
 
 # function to create a perk icon for each perk
 def create_perk_icon(self, perk_no, build_no, x, y):
