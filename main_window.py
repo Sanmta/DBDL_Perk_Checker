@@ -23,7 +23,7 @@ class Ui_MainWindow(object):
     def setup_ui(self, MainWindow):
         # main window setup
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1300, 900)
+        MainWindow.resize(1100, 900)
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
@@ -49,7 +49,6 @@ class Ui_MainWindow(object):
         
         for i in range(1, 5): 
             create_survivor_label(self, str(i), 30, 200 + 200*(i-1)) 
-            create_valid_label(self, str(i), 1050, 200 + 200*(i-1))
             for j in range(1, 5):
                 create_perk_icon(self, str(j), str(i), 225*(j-1) + 200, 200*(i-1) + 130) 
                 create_perk_search_bar(self, str(j), str(i), 225 * j - 25, 200*(i-1) + 100) 
@@ -139,35 +138,53 @@ def create_perk_arrays(self, perks):
 
 # function to check if the perks in the build exist
 def check_perks(self, d1, d2, d3, d4, expected_build, build_no):
-
-    def find_non_matching_values(d, expected):
-        return [item for item in expected if item not in d]
-    
     if ((sorted(d1) == sorted(expected_build)) == True):
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(build_no) + "_Valid").show()
+        set_perk_backgrounds(self, 1, True, None)
     elif ((sorted(d2) == sorted(expected_build)) == True):
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(build_no) + "_Valid").show()
+        set_perk_backgrounds(self, 2, True, None)
     elif ((sorted(d3) == sorted(expected_build)) == True):
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(build_no) + "_Valid").show()
+        set_perk_backgrounds(self, 3, True, None)
     elif ((sorted(d4) == sorted(expected_build)) == True):
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(build_no) + "_Valid").show()
+        set_perk_backgrounds(self, 4, True, None)
     else:
         if build_no == 1:
             non_matching_d1 = find_non_matching_values(d1, expected_build)
+            set_perk_backgrounds(self, build_no, False, non_matching_d1)
             show_error_message("Error", f"{non_matching_d1} not found in build " + str(build_no) + ".")
         elif build_no == 2:
             non_matching_d2 = find_non_matching_values(d2, expected_build)
+            set_perk_backgrounds(self, build_no, False, non_matching_d2)
             show_error_message("Error", f"{non_matching_d2} not found in build " + str(build_no) + ".")
         elif build_no == 3:
             non_matching_d3 = find_non_matching_values(d3, expected_build)
+            set_perk_backgrounds(self, build_no, False, non_matching_d3)
             show_error_message("Error", f"{non_matching_d3} not found in build " + str(build_no) + ".")
         elif build_no == 4:
             non_matching_d4 = find_non_matching_values(d4, expected_build)
+            set_perk_backgrounds(self, build_no, False, non_matching_d4)
             show_error_message("Error", f"{non_matching_d4} not found in build " + str(build_no) + ".")
 
+def set_perk_backgrounds(self, build_no, correct, non_matching_values):
+    if correct:    
+        for perk_no in range(1, 5):
+            perk_bg = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerkBG_" + str(perk_no) + "_Surv_" + str(build_no))
+            perk_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBGCorrect.png"))
+    else:
+        for perk_no in range(1, 5):
+            if any(perk_no == i for i, _ in non_matching_values):            
+                perk_bg = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerkBG_" + str(perk_no) + "_Surv_" + str(build_no))
+                perk_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBGIncorrect.png"))
+            else:
+                perk_bg = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerkBG_" + str(perk_no) + "_Surv_" + str(build_no))
+                perk_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBGCorrect.png"))
+
 # additional function to get the differences between two builds
-def get_differences(build, expected_build):
-        return list(set(build) - set(expected_build)), list(set(expected_build) - set(build))
+def find_non_matching_values(d, expected):
+    non_matching_values = []
+    for i, item in enumerate(expected):
+        if item not in d:
+            non_matching_values.append((i+1, item))
+    return non_matching_values
 
 # function to show an error message
 def show_error_message(title, message):
@@ -197,18 +214,6 @@ def create_survivor_label(self, survivor_no, x, y):
     label_survivor.setObjectName("lblSurvivor_" + survivor_no)
     label_survivor.setText(_translate("MainWindow", "Survivor "  + survivor_no + ":"))
 
-# function to create a "valid" label for each build
-def create_valid_label(self, survivor_no, x, y):
-    _translate = QtCore.QCoreApplication.translate
-    label_valid = QtWidgets.QLabel(parent=self.centralwidget)
-    label_valid.setGeometry(QtCore.QRect(x, y, 101, 21))
-    font = QtGui.QFont()
-    font.setFamily("Roboto")
-    font.setPointSize(16)
-    label_valid.setFont(font)
-    label_valid.setObjectName("lblSurv_" + survivor_no + "_Valid")
-    label_valid.setText(_translate("MainWindow", "Valid!"))
-    label_valid.hide()
 
 # function to create a perk icon for each perk
 def create_perk_icon(self, perk_no, survivor_no, x, y):
@@ -217,10 +222,11 @@ def create_perk_icon(self, perk_no, survivor_no, x, y):
     perk_icon_bg.setGeometry(QtCore.QRect(x, y, 150, 150))
     perk_icon_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
     perk_icon_bg.setScaledContents(True)
+    perk_icon_bg.setObjectName("lblPerkBG_" + perk_no + "_Surv_" + survivor_no)
     # create icon on top of background
     perk_icon = QtWidgets.QLabel(parent=self.centralwidget)
     perk_icon.setGeometry(QtCore.QRect(x, y, 150, 150))
-    perk_icon.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
+    perk_icon.setPixmap(QtGui.QPixmap(""))
     perk_icon.setScaledContents(True)
     perk_icon.setObjectName("lblPerk_" + perk_no + "_Surv_" + survivor_no)     
 
@@ -276,10 +282,12 @@ def create_button(self, x, y, width, height, text):
 # function to reset all perk search bars, this will in turn reset all the perk icons
 def reset_perks(self):
     for i in range(1, 5):
-        self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(i) + "_Valid").hide()
         for j in range(1, 5): 
             line_edit = self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_" + str(j) + "_Surv_" + str(i))
             line_edit.clear()
+
+            perk_bg = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerkBG_" + str(j) + "_Surv_" + str(i))
+            perk_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
 
 # function to format perk name into valid path to locate the perk icon
 def format_perk_name(input_string):
