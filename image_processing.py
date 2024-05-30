@@ -16,7 +16,7 @@ def compare_images(imageA, imageB):
     return m, s
 
 # function that searches for perks in the end screen given the end screen image and positions of the ROIs
-def search(end_screen):
+def search(end_screen, always_dejavu):
     end_screen_gray=cv2.cvtColor(end_screen, cv2.COLOR_BGR2GRAY) # convert the image to grayscale to allow for thresholding
     rois = [
         ((37 * j) + 441, (79 * i) + 312, 34, 34) if j == 1 else ((37 * j) + 442, (79 * i) + 312, 34, 34)  # (x, y, width, height)
@@ -53,17 +53,23 @@ def search(end_screen):
 
         # if the best match is an eye perk, apply thresholding to the ROI and compare again as they are harder to match
         if "DejaVu" in reference_files[best_match] or "ObjectOfObsession" in reference_files[best_match] or "DarkSense" in reference_files[best_match] or "Kindred" in reference_files[best_match]:
-            threshold_needed = True # flag to indicate that thresholding is needed            
-            ssim_result_threshold = 0
-            mse_result_threshold = 0
-            for k, reference_image in enumerate(resized_reference_images):
-                n, r = compare_images(thresholded_roi, reference_image) 
-                # higher SSIM value still indicates a better match, pretty much every time the eye perk will be deja vu, so if I
-                # run into issues identifying the perk in the future, I can just hardcode it to be deja vu
-                if r > ssim_result_threshold:
-                    mse_result_threshold = n
-                    ssim_result_threshold = r
-                    best_match_threshold = k
+            threshold_needed = True # flag to indicate that thresholding is needed
+            if (always_dejavu == True):
+                for p, perk in enumerate(reference_files):
+                    if "DejaVu" in perk:
+                        best_match_threshold = p
+                        break
+            else:    
+                ssim_result_threshold = 0
+                mse_result_threshold = 0
+                for k, reference_image in enumerate(resized_reference_images):
+                    n, r = compare_images(thresholded_roi, reference_image) 
+                    # higher SSIM value still indicates a better match, pretty much every time the eye perk will be deja vu, so if I
+                    # run into issues identifying the perk in the future, I can just hardcode it to be deja vu
+                    if r > ssim_result_threshold:
+                        mse_result_threshold = n
+                        ssim_result_threshold = r
+                        best_match_threshold = k
         if threshold_needed == True:
            recognised_perks.insert(i, reference_files[best_match_threshold])
         else: 
