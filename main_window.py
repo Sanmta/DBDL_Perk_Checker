@@ -83,15 +83,15 @@ class Ui_MainWindow(object):
 def paste_image(self):
     clipboard_image = ImageGrab.grabclipboard() # get image from clipboard
 
-    if (clipboard_image is not None and
-        clipboard_image.size == (1920, 1032)): # check if image is 1920x1080 (minus task)
-        # convert the Pillow Image to a NumPy array
-        end_screen = cv2.cvtColor(np.array(clipboard_image), cv2.COLOR_RGB2BGR)
-        create_perk_arrays(self, search(end_screen, always_dejavu))
-    elif (clipboard_image is None):
-        show_error_message("Error", "No image found in clipboard.")
+    if (clipboard_image is not None):
+        if (clipboard_image.size == (1920, 1032)): # check if image is 1920x1080 (minus task)
+            # convert the Pillow Image to a NumPy array
+            end_screen = cv2.cvtColor(np.array(clipboard_image), cv2.COLOR_RGB2BGR)
+            create_perk_arrays(self, search(end_screen, always_dejavu))
+        else:
+            show_error_message("Error", "Image size is not 1920x1080.")
     else:
-        show_error_message("Error", "Image size is not 1920x1080.")
+        show_error_message("Error", "No image found in clipboard.")
 
 # function to create arrays of both selected perks and detected perks
 def create_perk_arrays(self, perks):
