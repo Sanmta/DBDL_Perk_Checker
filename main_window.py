@@ -139,6 +139,10 @@ def create_perk_arrays(self, perks):
 
 # function to check if the perks in the build exist
 def check_perks(self, d1, d2, d3, d4, expected_build, build_no):
+
+    def find_non_matching_values(d, expected):
+        return [item for item in expected if item not in d]
+    
     if ((sorted(d1) == sorted(expected_build)) == True):
         self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(build_no) + "_Valid").show()
     elif ((sorted(d2) == sorted(expected_build)) == True):
@@ -148,8 +152,18 @@ def check_perks(self, d1, d2, d3, d4, expected_build, build_no):
     elif ((sorted(d4) == sorted(expected_build)) == True):
         self.centralwidget.findChild(QtWidgets.QLabel, "lblSurv_" + str(build_no) + "_Valid").show()
     else:
-        # get_differences(expected_build)
-        show_error_message("Error", "Build " + str(build_no) + " not found.")
+        if build_no == 1:
+            non_matching_d1 = find_non_matching_values(d1, expected_build)
+            show_error_message("Error", f"{non_matching_d1} not found in build " + str(build_no) + ".")
+        elif build_no == 2:
+            non_matching_d2 = find_non_matching_values(d2, expected_build)
+            show_error_message("Error", f"{non_matching_d2} not found in build " + str(build_no) + ".")
+        elif build_no == 3:
+            non_matching_d3 = find_non_matching_values(d3, expected_build)
+            show_error_message("Error", f"{non_matching_d3} not found in build " + str(build_no) + ".")
+        elif build_no == 4:
+            non_matching_d4 = find_non_matching_values(d4, expected_build)
+            show_error_message("Error", f"{non_matching_d4} not found in build " + str(build_no) + ".")
 
 # additional function to get the differences between two builds
 def get_differences(build, expected_build):
