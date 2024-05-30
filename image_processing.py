@@ -20,7 +20,7 @@ def search(end_screen, always_dejavu):
     end_screen_gray=cv2.cvtColor(end_screen, cv2.COLOR_BGR2GRAY) # convert the image to grayscale to allow for thresholding
     rois = [
         ((37 * j) + 441, (79 * i) + 312, 34, 34) if j == 1 else ((37 * j) + 442, (79 * i) + 312, 34, 34)  # (x, y, width, height)
-        for i in range(4)  # Loop for survivors
+        for i in range(4)  # Loop for builds
         for j in range(4)  # Loop for perks
     ]
     # performed testing with standard pngs, then with pngs along with perk backgrounds, however the accuracy was low

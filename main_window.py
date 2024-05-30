@@ -29,26 +29,26 @@ class Ui_MainWindow(object):
 
         # dictionary to hold line edit widgets
         self.line_edits = {
-            'searchPerk_1_Surv_1': 'lblPerk_1_Surv_1', 
-            'searchPerk_2_Surv_1': 'lblPerk_2_Surv_1', 
-            'searchPerk_3_Surv_1': 'lblPerk_3_Surv_1', 
-            'searchPerk_4_Surv_1': 'lblPerk_4_Surv_1',                 
-            'searchPerk_1_Surv_2': 'lblPerk_1_Surv_2', 
-            'searchPerk_2_Surv_2': 'lblPerk_2_Surv_2', 
-            'searchPerk_3_Surv_2': 'lblPerk_3_Surv_2', 
-            'searchPerk_4_Surv_2': 'lblPerk_4_Surv_2',
-            'searchPerk_1_Surv_3': 'lblPerk_1_Surv_3', 
-            'searchPerk_2_Surv_3': 'lblPerk_2_Surv_3', 
-            'searchPerk_3_Surv_3': 'lblPerk_3_Surv_3', 
-            'searchPerk_4_Surv_3': 'lblPerk_4_Surv_3',
-            'searchPerk_1_Surv_4': 'lblPerk_1_Surv_4', 
-            'searchPerk_2_Surv_4': 'lblPerk_2_Surv_4', 
-            'searchPerk_3_Surv_4': 'lblPerk_3_Surv_4', 
-            'searchPerk_4_Surv_4': 'lblPerk_4_Surv_4'
+            'searchPerk_1_Build_1': 'lblPerk_1_Build_1', 
+            'searchPerk_2_Build_1': 'lblPerk_2_Build_1', 
+            'searchPerk_3_Build_1': 'lblPerk_3_Build_1', 
+            'searchPerk_4_Build_1': 'lblPerk_4_Build_1',                 
+            'searchPerk_1_Build_2': 'lblPerk_1_Build_2', 
+            'searchPerk_2_Build_2': 'lblPerk_2_Build_2', 
+            'searchPerk_3_Build_2': 'lblPerk_3_Build_2', 
+            'searchPerk_4_Build_2': 'lblPerk_4_Build_2',
+            'searchPerk_1_Build_3': 'lblPerk_1_Build_3', 
+            'searchPerk_2_Build_3': 'lblPerk_2_Build_3', 
+            'searchPerk_3_Build_3': 'lblPerk_3_Build_3', 
+            'searchPerk_4_Build_3': 'lblPerk_4_Build_3',
+            'searchPerk_1_Build_4': 'lblPerk_1_Build_4', 
+            'searchPerk_2_Build_4': 'lblPerk_2_Build_4', 
+            'searchPerk_3_Build_4': 'lblPerk_3_Build_4', 
+            'searchPerk_4_Build_4': 'lblPerk_4_Build_4'
         }        
         
         for i in range(1, 5): 
-            create_survivor_label(self, str(i), 30, 200 + 200*(i-1)) 
+            create_build_label(self, str(i), 30, 200 + 200*(i-1)) 
             for j in range(1, 5):
                 create_perk_icon(self, str(j), str(i), 225*(j-1) + 200, 200*(i-1) + 130) 
                 create_perk_search_bar(self, str(j), str(i), 225 * j - 25, 200*(i-1) + 100) 
@@ -104,31 +104,31 @@ def create_perk_arrays(self, perks):
     detected_build4 = [perk.replace("iconPerks_", "").replace(".jpg", "").lower() for perk in perks[12:16]]
 
     expected_build1 = [
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Surv_1").text()).lower(),
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Surv_1").text()).lower(),
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Surv_1").text()).lower(),
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Surv_1").text()).lower()
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Build_1").text()).lower(),
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Build_1").text()).lower(),
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Build_1").text()).lower(),
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Build_1").text()).lower()
     ]
     
     expected_build2 = [
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Surv_2").text()).lower(), 
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Surv_2").text()).lower(), 
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Surv_2").text()).lower(), 
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Surv_2").text()).lower()
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Build_2").text()).lower(), 
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Build_2").text()).lower(), 
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Build_2").text()).lower(), 
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Build_2").text()).lower()
     ]
     
     expected_build3 = [
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Surv_3").text()).lower(),
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Surv_3").text()).lower(),
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Surv_3").text()).lower(),
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Surv_3").text()).lower()
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Build_3").text()).lower(),
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Build_3").text()).lower(),
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Build_3").text()).lower(),
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Build_3").text()).lower()
     ]
 
     expected_build4 = [
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Surv_4").text()).lower(), 
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Surv_4").text()).lower(), 
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Surv_4").text()).lower(), 
-        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Surv_4").text()).lower()
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_1_Build_4").text()).lower(), 
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_2_Build_4").text()).lower(), 
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_3_Build_4").text()).lower(), 
+        format_perk_name(self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_4_Build_4").text()).lower()
     ]
 
     check_perks(self, detected_build1, detected_build2, detected_build3, detected_build4, expected_build1, 1)
@@ -167,15 +167,15 @@ def check_perks(self, d1, d2, d3, d4, expected_build, build_no):
 def set_perk_backgrounds(self, build_no, correct, non_matching_values):
     if correct:    
         for perk_no in range(1, 5):
-            perk_bg = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerkBG_" + str(perk_no) + "_Surv_" + str(build_no))
+            perk_bg = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerkBG_" + str(perk_no) + "_Build_" + str(build_no))
             perk_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBGCorrect.png"))
     else:
         for perk_no in range(1, 5):
             if any(perk_no == i for i, _ in non_matching_values):            
-                perk_bg = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerkBG_" + str(perk_no) + "_Surv_" + str(build_no))
+                perk_bg = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerkBG_" + str(perk_no) + "_Build_" + str(build_no))
                 perk_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBGIncorrect.png"))
             else:
-                perk_bg = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerkBG_" + str(perk_no) + "_Surv_" + str(build_no))
+                perk_bg = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerkBG_" + str(perk_no) + "_Build_" + str(build_no))
                 perk_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBGCorrect.png"))
 
 # additional function to get the differences between two builds
@@ -202,41 +202,41 @@ def create_checkbox(self, text, x, y, w, h):
     checkbox.setText(text)
     return checkbox
 
-# function to create a label for each survivor
-def create_survivor_label(self, survivor_no, x, y):
+# function to create a label for each build
+def create_build_label(self, build_no, x, y):
     _translate = QtCore.QCoreApplication.translate
-    label_survivor = QtWidgets.QLabel(parent=self.centralwidget)
-    label_survivor.setGeometry(QtCore.QRect(x, y, 101, 21))
+    label_build = QtWidgets.QLabel(parent=self.centralwidget)
+    label_build.setGeometry(QtCore.QRect(x, y, 101, 21))
     font = QtGui.QFont()
     font.setFamily("Roboto")
     font.setPointSize(16)
-    label_survivor.setFont(font)
-    label_survivor.setObjectName("lblSurvivor_" + survivor_no)
-    label_survivor.setText(_translate("MainWindow", "Survivor "  + survivor_no + ":"))
+    label_build.setFont(font)
+    label_build.setObjectName("lblBuild_" + build_no)
+    label_build.setText(_translate("MainWindow", "Build "  + build_no + ":"))
 
 
 # function to create a perk icon for each perk
-def create_perk_icon(self, perk_no, survivor_no, x, y):
+def create_perk_icon(self, perk_no, build_no, x, y):
     # create background for icon
     perk_icon_bg = QtWidgets.QLabel(parent=self.centralwidget)
     perk_icon_bg.setGeometry(QtCore.QRect(x, y, 150, 150))
     perk_icon_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
     perk_icon_bg.setScaledContents(True)
-    perk_icon_bg.setObjectName("lblPerkBG_" + perk_no + "_Surv_" + survivor_no)
+    perk_icon_bg.setObjectName("lblPerkBG_" + perk_no + "_Build_" + build_no)
     # create icon on top of background
     perk_icon = QtWidgets.QLabel(parent=self.centralwidget)
     perk_icon.setGeometry(QtCore.QRect(x, y, 150, 150))
     perk_icon.setPixmap(QtGui.QPixmap(""))
     perk_icon.setScaledContents(True)
-    perk_icon.setObjectName("lblPerk_" + perk_no + "_Surv_" + survivor_no)     
+    perk_icon.setObjectName("lblPerk_" + perk_no + "_Build_" + build_no)     
 
 # function to try and update the perk icon when the search bar is changed
 def on_selection_changed(self, perk_search_bar):
     object_name = perk_search_bar.objectName()
     perk_no = object_name.split('_')[1]  
-    survivor_no = object_name.split('_')[3]
+    build_no = object_name.split('_')[3]
     # get the perk_icon object
-    perk_icon = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerk_" + perk_no + "_Surv_" + survivor_no)
+    perk_icon = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerk_" + perk_no + "_Build_" + build_no)
     try_icon_update(perk_search_bar, perk_icon)
     
 # function to update perk icon when selection box changes
@@ -256,10 +256,10 @@ def perk_exists(perk_name):
     else: return False
 
 # function to create a search bar for each perk
-def create_perk_search_bar(self, perk_no, survivor_no, x, y):
+def create_perk_search_bar(self, perk_no, build_no, x, y):
     perk_search_bar = QtWidgets.QLineEdit(parent=self.centralwidget)
     perk_search_bar.setGeometry(QtCore.QRect(x, y, 151, 22))
-    perk_search_bar.setObjectName("searchPerk_" + perk_no + "_Surv_" + survivor_no) 
+    perk_search_bar.setObjectName("searchPerk_" + perk_no + "_Build_" + build_no) 
     # create completer for the search bar
     completer = list_of_all_perks()
     completer.setCaseSensitivity(QtCore.Qt.CaseSensitivity.CaseInsensitive)
@@ -283,10 +283,10 @@ def create_button(self, x, y, width, height, text):
 def reset_perks(self):
     for i in range(1, 5):
         for j in range(1, 5): 
-            line_edit = self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_" + str(j) + "_Surv_" + str(i))
+            line_edit = self.centralwidget.findChild(QtWidgets.QLineEdit, "searchPerk_" + str(j) + "_Build_" + str(i))
             line_edit.clear()
 
-            perk_bg = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerkBG_" + str(j) + "_Surv_" + str(i))
+            perk_bg = self.centralwidget.findChild(QtWidgets.QLabel, "lblPerkBG_" + str(j) + "_Build_" + str(i))
             perk_bg.setPixmap(QtGui.QPixmap("assets/perks/perkBG.png"))
 
 # function to format perk name into valid path to locate the perk icon
