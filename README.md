@@ -43,6 +43,14 @@ $ pip install -r requirements.txt
 $ python ./main_window.py
 ```
 
+To create an easy access batch file, open the RUN.bat file and edit the paths to where you downloaded Python. This can be found by typing `where Python` in the command prompt. An example bat file is shown below:
+
+```bat
+@echo off
+"C:\Users\foo\AppData\Local\Microsoft\WindowsApps\python.exe" "C:\Users\foo\Downloads\DBDL_Perk_Checker\main_window.py"
+pause
+```
+
 
 ## Download
 
